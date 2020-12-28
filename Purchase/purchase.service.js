@@ -14,11 +14,11 @@ module.exports = {
         );
     },
     //查詢特定資料
-    SearchById: (id, name, callback) => {
+    SearchById: (id, cid, callback) => {
         let a = "%" + id + "%";
-        let b = "%" + name + "%";
+        let b = "%" + cid + "%";
         pool.query(
-            `SELECT * FROM Purchase where P_FID like ? and P_FName like ? and PDelete="0";`,
+            `SELECT * FROM Purchase where P_FID like ? and P_CID like ? and PDelete="0";`,
             [a, b],
             (error, results, fields) => {
                 if (error) {
@@ -39,6 +39,8 @@ module.exports = {
         let OrderDate = req.body.order;
         let EstimateDate = req.body.estimate;
         let ActualDate = req.body.actual;
+        if (req.body.actual === "")
+            ActualDate = null;
         pool.query(
             `SELECT CDiscount FROM Customer where CID=? ;`,
             [

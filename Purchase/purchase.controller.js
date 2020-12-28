@@ -43,19 +43,28 @@ module.exports = {
     },
     //新增
     InsertInfo: (req, res) => {
-        InsertInfo(req, (error, results) => {
-            if (error) {
-                console.log(error);
-                return res.status(500).json({
-                    sucess: 0,
-                    message: "Error"
-                });
-            }
-            return res.status(200).json({
-                sucess: 1,
-                data: results
-            })
-        });
+        let Order = (Date.parse(req.body.order)).valueOf();
+        let Actual = (Date.parse(req.body.actual)).valueOf();
+        let Estimate = (Date.parse(req.body.estimate)).valueOf();
+        if (Order < Estimate && (Order < Actual || req.body.actual === ""))
+            InsertInfo(req, (error, results) => {
+                if (error) {
+                    console.log(error);
+                    return res.status(500).json({
+                        sucess: 0,
+                        message: "Error"
+                    });
+                }
+                return res.status(200).json({
+                    sucess: 1,
+                    data: results
+                })
+            });
+        else
+            return res.status(500).json({
+                sucess: 0,
+                message: "Error"
+            });
     },
     //修改
     UpdateInfo: (req, res) => {
